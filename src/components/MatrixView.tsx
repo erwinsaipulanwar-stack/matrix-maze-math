@@ -14,9 +14,9 @@ export function MatrixView({
   className,
 }: {
   m: Cell[][];
-  label?: string;
-  size?: keyof typeof SIZES;
-  className?: string;
+  label?: string | undefined;
+  size?: keyof typeof SIZES | undefined;
+  className?: string | undefined;
 }) {
   const columns = m[0]?.length ?? 0;
   return (

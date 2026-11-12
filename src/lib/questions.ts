@@ -33,8 +33,8 @@ const optionKey = (o: Option) => (o.kind === "text" ? `t:${o.text}` : `m:${matri
 function perturb(rng: Rng, m: Matrix): Matrix {
   const out = m.map((r) => [...r]);
   const i = int(rng, 0, out.length - 1);
-  const j = int(rng, 0, out[0].length - 1);
-  out[i][j] += nonZero(rng, -3, 3);
+  const j = int(rng, 0, out[0]!.length - 1);
+  out[i]![j]! += nonZero(rng, -3, 3);
   return out;
 }
 
@@ -113,14 +113,15 @@ const pengenalan: Gen = (rng) => {
     Array.from({ length: 19 }, (_, k) => k - 9),
   );
   const m: Matrix = [values.slice(0, 3), values.slice(3, 6), values.slice(6, 9)];
+  const at = (r: number, c: number) => m[r]![c]!;
   const i = int(rng, 0, 2);
   let j = int(rng, 0, 2);
   if (i === j) j = (j + 1) % 3;
   return {
     prompt: `Nilai elemen a${subscript(`${i + 1}${j + 1}`)} pada matriks A adalah…`,
     matrices: [{ label: "A", m }],
-    ...numberQ(rng, m[i][j], [m[j][i], m[i][(j + 1) % 3], m[(i + 1) % 3][j]]),
-    explanation: `a${subscript(`${i + 1}${j + 1}`)} adalah elemen pada baris ke-${i + 1} dan kolom ke-${j + 1}, yaitu ${formatCell(m[i][j])}.`,
+    ...numberQ(rng, at(i, j), [at(j, i), at(i, (j + 1) % 3), at((i + 1) % 3, j)]),
+    explanation: `a${subscript(`${i + 1}${j + 1}`)} adalah elemen pada baris ke-${i + 1} dan kolom ke-${j + 1}, yaitu ${formatCell(at(i, j))}.`,
   };
 };
 
@@ -203,7 +204,8 @@ const transposeGen: Gen = (rng) => {
   if (rng() < 0.55) {
     const a = randomMatrix(rng, 2, 3);
     const t = transpose(a);
-    const flatWrong: Matrix = [a[0].slice(0, 2), [a[0][2], a[1][0]], a[1].slice(1, 3)];
+    const [a0, a1] = a as [number[], number[]];
+    const flatWrong: Matrix = [a0.slice(0, 2), [a0[2]!, a1[0]!], a1.slice(1, 3)];
     const reversed = [...t].reverse();
     return {
       prompt: "Transpose dari matriks A (Aᵀ) adalah…",
@@ -252,12 +254,12 @@ const skalar: Gen = (rng) => {
   const k = pick(rng, [-3, -2, 2, 3, 4, 5]);
   const a = randomMatrix(rng, 2, 2, -6, 6);
   const correct = scale(k, a);
-  const firstRowOnly: Matrix = [correct[0], a[1]];
+  const firstRowOnly: Matrix = [correct[0]!, a[1]!];
   return {
     prompt: `Hasil dari ${formatCell(k)}A adalah…`,
     matrices: [{ label: "A", m: a }],
     ...matrixQ(rng, correct, [a.map((r) => r.map((v) => v + k)), firstRowOnly, scale(-k, a)]),
-    explanation: `Kalikan ${formatCell(k)} ke setiap elemen A, misalnya ${formatCell(k)} × ${formatCell(a[0][0])} = ${formatCell(correct[0][0])}.`,
+    explanation: `Kalikan ${formatCell(k)} ke setiap elemen A, misalnya ${formatCell(k)} × ${formatCell(a[0]![0]!)} = ${formatCell(correct[0]![0]!)}.`,
   };
 };
 
@@ -288,14 +290,14 @@ const perkalian: Gen = (rng) => {
       { label: "B", m: b },
     ],
     ...matrixQ(rng, ab, [multiply(b, a), elementwise(a, b), perturb(rng, ab)]),
-    explanation: `Gunakan baris × kolom. Contoh: c₁₁ = ${formatCell(a[0][0])}·${formatCell(b[0][0])} + ${formatCell(a[0][1])}·${formatCell(b[1][0])} = ${formatCell(ab[0][0])}.`,
+    explanation: `Gunakan baris × kolom. Contoh: c₁₁ = ${formatCell(a[0]![0]!)}·${formatCell(b[0]![0]!)} + ${formatCell(a[0]![1]!)}·${formatCell(b[1]![0]!)} = ${formatCell(ab[0]![0]!)}.`,
   };
 };
 
 const determinan: Gen = (rng) => {
   if (rng() < 0.65) {
     const m = randomMatrix(rng, 2, 2, -6, 9);
-    const [[a, b], [c, d]] = m;
+    const [[a, b], [c, d]] = m as [[number, number], [number, number]];
     const value = det(m);
     return {
       prompt: "Determinan matriks A adalah…",
@@ -322,7 +324,7 @@ function unimodular(rng: Rng): Matrix {
     [1 + k * m, k],
     [m, 1],
   ];
-  const swapped = rng() < 0.4 ? [base[1], base[0]] : base;
+  const swapped: Matrix = rng() < 0.4 ? [base[1]!, base[0]!] : base;
   return rng() < 0.5 ? swapped : transpose(swapped);
 }
 
@@ -330,7 +332,7 @@ const invers: Gen = (rng) => {
   if (rng() < 0.7) {
     const a = unimodular(rng);
     const inv = inverse2(a)!;
-    const [[p, q], [r, s]] = a;
+    const [[p, q], [r, s]] = a as [[number, number], [number, number]];
     return {
       prompt: "Invers dari matriks A (A⁻¹) adalah…",
       matrices: [{ label: "A", m: a }],

@@ -21,13 +21,13 @@ export const nonZero = (rng: Rng, min: number, max: number) => {
   return v;
 };
 
-export const pick = <T>(rng: Rng, list: readonly T[]): T => list[Math.floor(rng() * list.length)];
+export const pick = <T>(rng: Rng, list: readonly T[]): T => list[Math.floor(rng() * list.length)]!;
 
 export function shuffle<T>(rng: Rng, list: readonly T[]): T[] {
   const out = [...list];
   for (let i = out.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));
-    [out[i], out[j]] = [out[j], out[i]];
+    [out[i], out[j]] = [out[j]!, out[i]!];
   }
   return out;
 }

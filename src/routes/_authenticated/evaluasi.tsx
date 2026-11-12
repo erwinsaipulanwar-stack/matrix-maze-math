@@ -226,7 +226,7 @@ function EvaluasiPage() {
             const right = answers[i] === q.answer;
             return (
               <div key={q.id}>
-                <QuestionCard question={q} selected={answers[i]} reveal disabled number={i + 1} />
+                <QuestionCard question={q} selected={answers[i] ?? null} reveal disabled number={i + 1} />
                 <div className={cn("mt-3 rounded-2xl p-4", right ? "bg-teal-soft" : "bg-coral-soft")}>
                   <p className="font-display font-bold">
                     {right ? "✅ Benar" : answers[i] === null ? "⏭️ Tidak dijawab" : "❌ Kurang tepat"}
@@ -242,7 +242,7 @@ function EvaluasiPage() {
     );
   }
 
-  const q = questions[idx];
+  const q = questions[idx]!;
   const answeredCount = answers.filter((a) => a !== null).length;
   const lowTime = remaining <= 60;
 
@@ -291,7 +291,7 @@ function EvaluasiPage() {
         key={q.id}
         question={q}
         number={idx + 1}
-        selected={answers[idx]}
+        selected={answers[idx] ?? null}
         onSelect={(choice) => setAnswers((a) => a.map((v, i) => (i === idx ? choice : v)))}
       />
 

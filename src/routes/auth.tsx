@@ -19,9 +19,9 @@ const safeRedirect = (value: unknown) =>
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
-  validateSearch: (search: Record<string, unknown>): { redirect?: string; mode?: Mode } => ({
-    redirect: safeRedirect(search.redirect),
-    mode: search.mode === "daftar" ? "daftar" : undefined,
+  validateSearch: (search: Record<string, unknown>): { redirect?: string | undefined; mode?: Mode | undefined } => ({
+    redirect: safeRedirect(search["redirect"]),
+    mode: search["mode"] === "daftar" ? "daftar" : undefined,
   }),
   beforeLoad: async () => {
     const { data } = await supabase.auth.getSession();

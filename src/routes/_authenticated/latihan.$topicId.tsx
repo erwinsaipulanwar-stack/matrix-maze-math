@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, BookOpen, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -73,7 +73,11 @@ function PracticePage() {
     onError: () => toast.error("Hasil latihan gagal disimpan. Periksa koneksimu."),
   });
 
-  const q = questions[idx];
+  const q = questions[idx]!;
+  const feedbackRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (checked) feedbackRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [checked]);
   const isRight = checked && selected === q.answer;
 
   function check() {
@@ -175,9 +179,10 @@ function PracticePage() {
       />
 
       <div
+        ref={feedbackRef}
         className={cn(
-          "sticky bottom-24 z-20 mt-5 rounded-3xl p-4 transition-colors md:bottom-4",
-          !checked && "bg-transparent",
+          "mt-5 scroll-mb-28 rounded-3xl p-4 transition-colors md:scroll-mb-6",
+          !checked && "sticky bottom-24 z-20 bg-transparent md:bottom-4",
           checked && isRight && "animate-pop-in bg-teal-soft shadow-[0_4px_0_0_var(--teal-shade)]",
           checked && !isRight && "animate-pop-in bg-coral-soft shadow-[0_4px_0_0_var(--coral-shade)]",
         )}

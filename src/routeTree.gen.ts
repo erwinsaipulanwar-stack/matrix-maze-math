@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedBerandaRouteImport } from './routes/_authenticated/beranda'
 import { Route as AuthenticatedEvaluasiRouteImport } from './routes/_authenticated/evaluasi'
+import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
 import { Route as AuthenticatedBelajarIndexRouteImport } from './routes/_authenticated/belajar.index'
 import { Route as AuthenticatedBelajarLessonIdRouteImport } from './routes/_authenticated/belajar.$lessonId'
 import { Route as AuthenticatedLatihanIndexRouteImport } from './routes/_authenticated/latihan.index'
@@ -41,6 +42,11 @@ const AuthenticatedBerandaRoute = AuthenticatedBerandaRouteImport.update({
 const AuthenticatedEvaluasiRoute = AuthenticatedEvaluasiRouteImport.update({
   id: '/evaluasi',
   path: '/evaluasi',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
+  id: '/profil',
+  path: '/profil',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedBelajarIndexRoute =
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/beranda': typeof AuthenticatedBerandaRoute
   '/evaluasi': typeof AuthenticatedEvaluasiRoute
+  '/profil': typeof AuthenticatedProfilRoute
   '/belajar/$lessonId': typeof AuthenticatedBelajarLessonIdRoute
   '/latihan/$topicId': typeof AuthenticatedLatihanTopicIdRoute
   '/belajar/': typeof AuthenticatedBelajarIndexRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/beranda': typeof AuthenticatedBerandaRoute
   '/evaluasi': typeof AuthenticatedEvaluasiRoute
+  '/profil': typeof AuthenticatedProfilRoute
   '/belajar/$lessonId': typeof AuthenticatedBelajarLessonIdRoute
   '/latihan/$topicId': typeof AuthenticatedLatihanTopicIdRoute
   '/belajar': typeof AuthenticatedBelajarIndexRoute
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/beranda': typeof AuthenticatedBerandaRoute
   '/_authenticated/evaluasi': typeof AuthenticatedEvaluasiRoute
+  '/_authenticated/profil': typeof AuthenticatedProfilRoute
   '/_authenticated/belajar/$lessonId': typeof AuthenticatedBelajarLessonIdRoute
   '/_authenticated/latihan/$topicId': typeof AuthenticatedLatihanTopicIdRoute
   '/_authenticated/belajar/': typeof AuthenticatedBelajarIndexRoute
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/beranda'
     | '/evaluasi'
+    | '/profil'
     | '/belajar/$lessonId'
     | '/latihan/$topicId'
     | '/belajar/'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/beranda'
     | '/evaluasi'
+    | '/profil'
     | '/belajar/$lessonId'
     | '/latihan/$topicId'
     | '/belajar'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/beranda'
     | '/_authenticated/evaluasi'
+    | '/_authenticated/profil'
     | '/_authenticated/belajar/$lessonId'
     | '/_authenticated/latihan/$topicId'
     | '/_authenticated/belajar/'
@@ -177,6 +189,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEvaluasiRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/profil': {
+      id: '/_authenticated/profil'
+      path: '/profil'
+      fullPath: '/profil'
+      preLoaderRoute: typeof AuthenticatedProfilRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/belajar/': {
       id: '/_authenticated/belajar/'
       path: '/belajar'
@@ -211,6 +230,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedBerandaRoute: typeof AuthenticatedBerandaRoute
   AuthenticatedEvaluasiRoute: typeof AuthenticatedEvaluasiRoute
+  AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
   AuthenticatedBelajarLessonIdRoute: typeof AuthenticatedBelajarLessonIdRoute
   AuthenticatedLatihanTopicIdRoute: typeof AuthenticatedLatihanTopicIdRoute
   AuthenticatedBelajarIndexRoute: typeof AuthenticatedBelajarIndexRoute
@@ -220,6 +240,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBerandaRoute: AuthenticatedBerandaRoute,
   AuthenticatedEvaluasiRoute: AuthenticatedEvaluasiRoute,
+  AuthenticatedProfilRoute: AuthenticatedProfilRoute,
   AuthenticatedBelajarLessonIdRoute: AuthenticatedBelajarLessonIdRoute,
   AuthenticatedLatihanTopicIdRoute: AuthenticatedLatihanTopicIdRoute,
   AuthenticatedBelajarIndexRoute: AuthenticatedBelajarIndexRoute,

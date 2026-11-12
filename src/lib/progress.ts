@@ -38,8 +38,8 @@ export function levelFor(points: number) {
   LEVELS.forEach((l, i) => {
     if (points >= l.min) idx = i;
   });
-  const current = LEVELS[idx];
-  const next = LEVELS[idx + 1];
+  const current = LEVELS[idx]!;
+  const next = LEVELS[idx + 1] as (typeof LEVELS)[number] | undefined;
   const progress = next ? Math.round(((points - current.min) / (next.min - current.min)) * 100) : 100;
   return { ...current, index: idx, next, progress };
 }
