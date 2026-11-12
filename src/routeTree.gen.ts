@@ -10,33 +10,134 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedBerandaRouteImport } from './routes/_authenticated/beranda'
+import { Route as AuthenticatedEvaluasiRouteImport } from './routes/_authenticated/evaluasi'
+import { Route as AuthenticatedBelajarIndexRouteImport } from './routes/_authenticated/belajar.index'
+import { Route as AuthenticatedBelajarLessonIdRouteImport } from './routes/_authenticated/belajar.$lessonId'
+import { Route as AuthenticatedLatihanIndexRouteImport } from './routes/_authenticated/latihan.index'
+import { Route as AuthenticatedLatihanTopicIdRouteImport } from './routes/_authenticated/latihan.$topicId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedBerandaRoute = AuthenticatedBerandaRouteImport.update({
+  id: '/beranda',
+  path: '/beranda',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEvaluasiRoute = AuthenticatedEvaluasiRouteImport.update({
+  id: '/evaluasi',
+  path: '/evaluasi',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedBelajarIndexRoute =
+  AuthenticatedBelajarIndexRouteImport.update({
+    id: '/belajar/',
+    path: '/belajar/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedBelajarLessonIdRoute =
+  AuthenticatedBelajarLessonIdRouteImport.update({
+    id: '/belajar/$lessonId',
+    path: '/belajar/$lessonId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedLatihanIndexRoute =
+  AuthenticatedLatihanIndexRouteImport.update({
+    id: '/latihan/',
+    path: '/latihan/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedLatihanTopicIdRoute =
+  AuthenticatedLatihanTopicIdRouteImport.update({
+    id: '/latihan/$topicId',
+    path: '/latihan/$topicId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/beranda': typeof AuthenticatedBerandaRoute
+  '/evaluasi': typeof AuthenticatedEvaluasiRoute
+  '/belajar/$lessonId': typeof AuthenticatedBelajarLessonIdRoute
+  '/latihan/$topicId': typeof AuthenticatedLatihanTopicIdRoute
+  '/belajar/': typeof AuthenticatedBelajarIndexRoute
+  '/latihan/': typeof AuthenticatedLatihanIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/beranda': typeof AuthenticatedBerandaRoute
+  '/evaluasi': typeof AuthenticatedEvaluasiRoute
+  '/belajar/$lessonId': typeof AuthenticatedBelajarLessonIdRoute
+  '/latihan/$topicId': typeof AuthenticatedLatihanTopicIdRoute
+  '/belajar': typeof AuthenticatedBelajarIndexRoute
+  '/latihan': typeof AuthenticatedLatihanIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/beranda': typeof AuthenticatedBerandaRoute
+  '/_authenticated/evaluasi': typeof AuthenticatedEvaluasiRoute
+  '/_authenticated/belajar/$lessonId': typeof AuthenticatedBelajarLessonIdRoute
+  '/_authenticated/latihan/$topicId': typeof AuthenticatedLatihanTopicIdRoute
+  '/_authenticated/belajar/': typeof AuthenticatedBelajarIndexRoute
+  '/_authenticated/latihan/': typeof AuthenticatedLatihanIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/beranda'
+    | '/evaluasi'
+    | '/belajar/$lessonId'
+    | '/latihan/$topicId'
+    | '/belajar/'
+    | '/latihan/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/beranda'
+    | '/evaluasi'
+    | '/belajar/$lessonId'
+    | '/latihan/$topicId'
+    | '/belajar'
+    | '/latihan'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/beranda'
+    | '/_authenticated/evaluasi'
+    | '/_authenticated/belajar/$lessonId'
+    | '/_authenticated/latihan/$topicId'
+    | '/_authenticated/belajar/'
+    | '/_authenticated/latihan/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +149,90 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/beranda': {
+      id: '/_authenticated/beranda'
+      path: '/beranda'
+      fullPath: '/beranda'
+      preLoaderRoute: typeof AuthenticatedBerandaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/evaluasi': {
+      id: '/_authenticated/evaluasi'
+      path: '/evaluasi'
+      fullPath: '/evaluasi'
+      preLoaderRoute: typeof AuthenticatedEvaluasiRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/belajar/': {
+      id: '/_authenticated/belajar/'
+      path: '/belajar'
+      fullPath: '/belajar/'
+      preLoaderRoute: typeof AuthenticatedBelajarIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/belajar/$lessonId': {
+      id: '/_authenticated/belajar/$lessonId'
+      path: '/belajar/$lessonId'
+      fullPath: '/belajar/$lessonId'
+      preLoaderRoute: typeof AuthenticatedBelajarLessonIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/latihan/': {
+      id: '/_authenticated/latihan/'
+      path: '/latihan'
+      fullPath: '/latihan/'
+      preLoaderRoute: typeof AuthenticatedLatihanIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/latihan/$topicId': {
+      id: '/_authenticated/latihan/$topicId'
+      path: '/latihan/$topicId'
+      fullPath: '/latihan/$topicId'
+      preLoaderRoute: typeof AuthenticatedLatihanTopicIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedBerandaRoute: typeof AuthenticatedBerandaRoute
+  AuthenticatedEvaluasiRoute: typeof AuthenticatedEvaluasiRoute
+  AuthenticatedBelajarLessonIdRoute: typeof AuthenticatedBelajarLessonIdRoute
+  AuthenticatedLatihanTopicIdRoute: typeof AuthenticatedLatihanTopicIdRoute
+  AuthenticatedBelajarIndexRoute: typeof AuthenticatedBelajarIndexRoute
+  AuthenticatedLatihanIndexRoute: typeof AuthenticatedLatihanIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedBerandaRoute: AuthenticatedBerandaRoute,
+  AuthenticatedEvaluasiRoute: AuthenticatedEvaluasiRoute,
+  AuthenticatedBelajarLessonIdRoute: AuthenticatedBelajarLessonIdRoute,
+  AuthenticatedLatihanTopicIdRoute: AuthenticatedLatihanTopicIdRoute,
+  AuthenticatedBelajarIndexRoute: AuthenticatedBelajarIndexRoute,
+  AuthenticatedLatihanIndexRoute: AuthenticatedLatihanIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
